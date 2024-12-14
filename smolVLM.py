@@ -13,6 +13,10 @@ model = AutoModelForVision2Seq.from_pretrained(
     _attn_implementation="flash_attention_2" if DEVICE == "cuda" else "eager",
 ).to(DEVICE)
 
+model.save_pretrained("smolvlm-instruct")
+
+model = AutoModelForVision2Seq.from_pretrained("smolvlm-instruct", torch_dtype=torch.bfloat16).to(DEVICE)
+
 def capture_image_from_webcam():
     # Open webcam
     cap = cv2.VideoCapture(0)
