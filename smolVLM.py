@@ -60,7 +60,7 @@ if webcam_image1 is not None:
             "role": "user",
             "content": [
                 {"type": "image"},
-                {"type": "image"},
+                # {"type": "image"},
                 {"type": "text", "text": "Can you describe the two images?"}
             ]
         },
