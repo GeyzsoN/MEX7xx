@@ -49,9 +49,10 @@ def capture_image_from_webcam():
 # Capture images from webcam
 print("Opening webcam to capture images...")
 webcam_image1 = capture_image_from_webcam()
-webcam_image2 = capture_image_from_webcam()
+# webcam_image2 = capture_image_from_webcam()
 
-if webcam_image1 is not None and webcam_image2 is not None:
+print("Processing images...")
+if webcam_image1 is not None:
     # Create input messages
     messages = [
         {
@@ -66,7 +67,7 @@ if webcam_image1 is not None and webcam_image2 is not None:
 
     # Prepare inputs
     prompt = processor.apply_chat_template(messages, add_generation_prompt=True)
-    inputs = processor(text=prompt, images=[webcam_image1, webcam_image2], return_tensors="pt")
+    inputs = processor(text=prompt, images=[webcam_image1], return_tensors="pt")
     inputs = inputs.to(DEVICE)
 
     # Generate outputs
