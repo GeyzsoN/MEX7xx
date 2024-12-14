@@ -66,6 +66,7 @@ if webcam_image1 is not None:
             ]
         },
     ]
+    
 
     print("Generating description...")
     # Prepare inputs
