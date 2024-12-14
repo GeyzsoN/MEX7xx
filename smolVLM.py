@@ -73,9 +73,11 @@ if webcam_image1 is not None:
     inputs = processor(text=prompt, images=[webcam_image1], return_tensors="pt")
     inputs = inputs.to(DEVICE)
 
-    print("Generating description...")
+    print("Generating outputs...")
     # Generate outputs
     generated_ids = model.generate(**inputs, max_new_tokens=500)
+    
+    print("Decoding outputs...")
     generated_texts = processor.batch_decode(
         generated_ids,
         skip_special_tokens=True,
