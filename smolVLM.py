@@ -5,6 +5,7 @@ from transformers.image_utils import load_image
 import cv2
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+print("Device:", DEVICE)
 
 # Initialize processor and model
 processor = AutoProcessor.from_pretrained("HuggingFaceTB/SmolVLM-Instruct")
