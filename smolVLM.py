@@ -1,6 +1,7 @@
 import torch
 from PIL import Image
 from transformers import AutoProcessor, AutoModelForVision2Seq
+from transformers.image_utils import load_image
 import cv2
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
@@ -13,18 +14,14 @@ model = AutoModelForVision2Seq.from_pretrained(
     _attn_implementation="flash_attention_2" if DEVICE == "cuda" else "eager",
 ).to(DEVICE)
 
-model.save_pretrained("smolvlm-instruct")
-
-model = AutoModelForVision2Seq.from_pretrained("smolvlm-instruct", torch_dtype=torch.bfloat16).to(DEVICE)
-
 def capture_image_from_webcam():
     # Open webcam
     cap = cv2.VideoCapture(0)
     if not cap.isOpened():
         print("Error: Could not access the webcam.")
         return None
-
-    print("Webcam is ready. Press Enter to capture an image.")
+    
+    print("Press 's' to capture an image and 'q' to quit.")
     while True:
         ret, frame = cap.read()
         if not ret:
@@ -34,37 +31,42 @@ def capture_image_from_webcam():
         # Show the webcam feed
         cv2.imshow("Webcam Feed", frame)
 
-        # Wait for Enter key to capture the image
-        if cv2.waitKey(1) & 0xFF == 13:  # ASCII for Enter key
+        # Wait for keypress
+        key = cv2.waitKey(1) & 0xFF
+        if key == ord('s'):  # Save the image on 's' key press
             cap.release()
             cv2.destroyAllWindows()
             # Convert BGR (OpenCV format) to RGB (PIL format)
             return Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+        elif key == ord('q'):  # Quit on 'q' key press
+            break
 
-    # Release webcam and close window if no image captured
+    # Release webcam and close window
     cap.release()
     cv2.destroyAllWindows()
     return None
 
-# Capture a single image from webcam
-print("Opening webcam to capture an image...")
-webcam_image = capture_image_from_webcam()
+# Capture images from webcam
+print("Opening webcam to capture images...")
+webcam_image1 = capture_image_from_webcam()
+webcam_image2 = capture_image_from_webcam()
 
-if webcam_image is not None:
+if webcam_image1 is not None and webcam_image2 is not None:
     # Create input messages
     messages = [
         {
             "role": "user",
             "content": [
                 {"type": "image"},
-                {"type": "text", "text": "Can you describe the image?"}
+                {"type": "image"},
+                {"type": "text", "text": "Can you describe the two images?"}
             ]
         },
     ]
 
     # Prepare inputs
     prompt = processor.apply_chat_template(messages, add_generation_prompt=True)
-    inputs = processor(text=prompt, images=[webcam_image], return_tensors="pt")
+    inputs = processor(text=prompt, images=[webcam_image1, webcam_image2], return_tensors="pt")
     inputs = inputs.to(DEVICE)
 
     # Generate outputs
@@ -77,4 +79,4 @@ if webcam_image is not None:
     print("Model Output:")
     print(generated_texts[0])
 else:
-    print("Image was not captured. Please try again.")
+    print("Images were not captured. Please try again.")
