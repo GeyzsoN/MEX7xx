@@ -54,6 +54,7 @@ webcam_image1 = capture_image_from_webcam()
 print("Processing images...")
 if webcam_image1 is not None:
     # Create input messages
+    print("Images captured successfully.")
     messages = [
         {
             "role": "user",
@@ -65,11 +66,13 @@ if webcam_image1 is not None:
         },
     ]
 
+    print("Generating description...")
     # Prepare inputs
     prompt = processor.apply_chat_template(messages, add_generation_prompt=True)
     inputs = processor(text=prompt, images=[webcam_image1], return_tensors="pt")
     inputs = inputs.to(DEVICE)
 
+    print("Generating description...")
     # Generate outputs
     generated_ids = model.generate(**inputs, max_new_tokens=500)
     generated_texts = processor.batch_decode(
