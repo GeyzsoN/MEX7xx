@@ -42,6 +42,13 @@ Press Ctrl + X to exit.
 
 
 
+# Install flash attention
+pip install setuptools wheel cython
+pip install build
+pip install flash-attn
+
+
+
 
 Pytorch for Jetson:
 https://forums.developer.nvidia.com/t/pytorch-for-jetson/72048
