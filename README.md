@@ -46,12 +46,25 @@ Press Ctrl + X to exit.
 pip install setuptools wheel cython
 pip install build
 pip install flash-attn
+pip install accelerate
 
-
-
+# Show jetson gpus
+jetson_clocks --show
 
 Pytorch for Jetson:
 https://forums.developer.nvidia.com/t/pytorch-for-jetson/72048
 
 Jetson orin nano Cuda Cudnn torch torchauido torchvision:
 https://forums.developer.nvidia.com/t/jetson-orin-nano-cuda-cudnn-torch-torchauido-torchvision/290430
+
+Cannot get Torch met CUDA to work on Jetson Orin
+https://forums.developer.nvidia.com/t/cannot-get-torch-met-cuda-to-work-on-jetson-orin/283931
+
+Can’t find compatible torchvision version for torch for jetpack 5.1
+https://forums.developer.nvidia.com/t/cant-find-compatible-torchvision-version-for-torch-for-jetpack-5-1/275454
+
+Jetson Containers:
+https://github.com/dusty-nv/jetson-containers?tab=readme-ov-file
+
+
+

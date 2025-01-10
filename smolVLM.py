@@ -4,6 +4,9 @@ from transformers import AutoProcessor, AutoModelForVision2Seq
 from transformers.image_utils import load_image
 import cv2
 
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 print("Device:", DEVICE)
 
@@ -12,8 +15,15 @@ processor = AutoProcessor.from_pretrained("HuggingFaceTB/SmolVLM-Instruct")
 model = AutoModelForVision2Seq.from_pretrained(
     "HuggingFaceTB/SmolVLM-Instruct",
     torch_dtype=torch.bfloat16,
-    _attn_implementation="flash_attention_2" if DEVICE == "cuda" else "eager",
-).to(DEVICE)
+    device_map="auto",
+    _attn_implementation="flash_attention_2",
+    # _attn_implementation="flash_attention_2" if DEVICE == "cuda" else "eager",
+)
+
+print(f"Model has {model.num_parameters():,} parameters")
+print("Moving model to device")
+model.to(DEVICE)
+print("Model loaded to device")
 
 def capture_image_from_webcam():
     # Open webcam
@@ -62,7 +72,7 @@ if webcam_image1 is not None:
             "content": [
                 {"type": "image"},
                 # {"type": "image"},
-                {"type": "text", "text": "Can you describe the two images?"}
+                {"type": "text", "text": "Can you describe the image?"}
             ]
         },
     ]
