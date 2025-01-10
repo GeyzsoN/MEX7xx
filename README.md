@@ -1,4 +1,7 @@
 
+1. First test on torch cuda
+python -c "import torch; print(torch.cuda.get_device_name(0)) if torch.cuda.is_available() else print('CUDA not available')"
+
 1. Uninstall existing torch installations
 pip3 uninstall torch torchvision torchaudio -y
 
@@ -40,6 +43,10 @@ Save and Exit:
 Press Ctrl + O to save.
 Press Ctrl + X to exit.
 
+cat /usr/local/cuda/version.txt
+cat /usr/local/cuda/version.json
+
+
 
 
 # Install flash attention
@@ -66,5 +73,11 @@ https://forums.developer.nvidia.com/t/cant-find-compatible-torchvision-version-f
 Jetson Containers:
 https://github.com/dusty-nv/jetson-containers?tab=readme-ov-file
 
+Install Pytorch with cuda on Jetson Orin nano Devloper Kit:
+https://forums.developer.nvidia.com/t/install-pytorch-with-cuda-on-jetson-orin-nano-devloper-kit/297427
 
+Cuda/ nvcc not found
+https://forums.developer.nvidia.com/t/cuda-nvcc-not-found/118068
 
+My jetson nano board returns ‘False’ to torch.cuda.is_available() in local directory
+https://forums.developer.nvidia.com/t/my-jetson-nano-board-returns-false-to-torch-cuda-is-available-in-local-directory/182498/5
