@@ -12,7 +12,8 @@ print(f"Using device: {DEVICE}")
 
 # Load images
 image1 = load_image("https://cdn.britannica.com/61/93061-050-99147DCE/Statue-of-Liberty-Island-New-York-Bay.jpg")
-image2 = load_image("https://huggingface.co/spaces/merve/chameleon-7b/resolve/main/bee.jpg")
+image1 = image1.resize((100, 100)) 
+# image2 = load_image("https://huggingface.co/spaces/merve/chameleon-7b/resolve/main/bee.jpg")
 
 # Initialize processor
 processor = AutoProcessor.from_pretrained("HuggingFaceTB/SmolVLM-Instruct")
@@ -20,7 +21,8 @@ processor = AutoProcessor.from_pretrained("HuggingFaceTB/SmolVLM-Instruct")
 # Initialize model, forcing all weights on GPU index 0
 model = AutoModelForVision2Seq.from_pretrained(
     "HuggingFaceTB/SmolVLM-Instruct",
-    torch_dtype=torch.bfloat16,
+    load_in_4bit=True,
+    # torch_dtype=torch.bfloat16,
     device_map={"": 0},  # all layers on GPU 0
     # Remove or replace _attn_implementation
 )
@@ -39,10 +41,10 @@ messages = [
         "role": "user",
         "content": [
             {"type": "image"},
-            {"type": "image"},
+            # {"type": "image"},
             {
                 "type": "text",
-                "text": "Can you describe the two images in not so great detail? "
+                "text": "Can you describe the image in not so great detail? "
                         "make it sound like you are teasing what's in the image"
             }
         ]
@@ -53,13 +55,14 @@ print("Preparing inputs and generating outputs...")
 
 # Prepare inputs
 prompt = processor.apply_chat_template(messages, add_generation_prompt=True)
-inputs = processor(text=prompt, images=[image1, image2], return_tensors="pt")
+# inputs = processor(text=prompt, images=[image1, image2], return_tensors="pt")
+inputs = processor(text=prompt, images=[image1], return_tensors="pt")
 inputs = inputs.to(DEVICE)
 
 print("Generating outputs...")
 
 # Generate outputs
-generated_ids = model.generate(**inputs, max_new_tokens=500, synced_gpus=False)
+generated_ids = model.generate(**inputs, max_new_tokens=10, synced_gpus=False)
 generated_texts = processor.batch_decode(
     generated_ids,
     skip_special_tokens=True,
