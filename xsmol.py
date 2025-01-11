@@ -19,13 +19,28 @@ image1 = image1.resize((100, 100))
 processor = AutoProcessor.from_pretrained("HuggingFaceTB/SmolVLM-Instruct")
 
 # Initialize model, forcing all weights on GPU index 0
+# model = AutoModelForVision2Seq.from_pretrained(
+#     "HuggingFaceTB/SmolVLM-Instruct",
+#     load_in_4bit=True,
+#     # torch_dtype=torch.bfloat16,
+#     device_map={"": 0},  # all layers on GPU 0
+#     # Remove or replace _attn_implementation
+# )
+
+from transformers import AutoModelForVision2Seq, BitsAndBytesConfig
+
+quantization_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_compute_dtype=torch.float16,  # Use float16 for compute
+)
+
 model = AutoModelForVision2Seq.from_pretrained(
     "HuggingFaceTB/SmolVLM-Instruct",
-    load_in_4bit=True,
-    # torch_dtype=torch.bfloat16,
-    device_map={"": 0},  # all layers on GPU 0
-    # Remove or replace _attn_implementation
+    quantization_config=quantization_config,
+    device_map="auto",
 )
+
+
 
 print(f"Model has {model.num_parameters():,} parameters")
 
