@@ -15,7 +15,10 @@ model, preprocess, tokenizer = open_clip.create_model_and_transforms(
     model_name, pretrained=pretrained
 )
 
-print(f"Model has {model._parameters:,} parameters")
+# Count the total number of parameters in the model
+total_params = sum(p.numel() for p in model.parameters())
+print(f"Model has {total_params:,} parameters")
+
 model = model.to(device)
 print("Model loaded to device")
 
