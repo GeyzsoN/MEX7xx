@@ -54,7 +54,7 @@ inputs = processor(text=prompt, images=[image1, image2], return_tensors="pt")
 inputs = inputs.to(DEVICE)
 
 # Generate outputs
-generated_ids = model.generate(**inputs, max_new_tokens=500)
+generated_ids = model.generate(**inputs, max_new_tokens=500, synced_gpus=False)
 generated_texts = processor.batch_decode(
     generated_ids,
     skip_special_tokens=True,
