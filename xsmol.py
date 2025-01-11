@@ -31,6 +31,8 @@ print(f"Model has {model.num_parameters():,} parameters")
 # model.to(DEVICE)  # <- This was causing offload conflicts with accelerate
 print("Model loaded to device (fully on GPU)")
 
+
+print("Creating input messages and generating output...")
 # Create input messages
 messages = [
     {
@@ -47,10 +49,14 @@ messages = [
     },
 ]
 
+print("Preparing inputs and generating outputs...")
+
 # Prepare inputs
 prompt = processor.apply_chat_template(messages, add_generation_prompt=True)
 inputs = processor(text=prompt, images=[image1, image2], return_tensors="pt")
 inputs = inputs.to(DEVICE)
+
+print("Generating outputs...")
 
 # Generate outputs
 generated_ids = model.generate(**inputs, max_new_tokens=500, synced_gpus=False)
@@ -58,5 +64,7 @@ generated_texts = processor.batch_decode(
     generated_ids,
     skip_special_tokens=True,
 )
+
+print("Output:")
 
 print(generated_texts[0])
