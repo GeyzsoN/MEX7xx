@@ -15,7 +15,7 @@ model, preprocess, tokenizer = open_clip.create_model_and_transforms(
     model_name, pretrained=pretrained
 )
 
-print(f"Model has {model._parameters():,} parameters")
+print(f"Model has {model._parameters:,} parameters")
 model = model.to(device)
 print("Model loaded to device")
 
