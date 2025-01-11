@@ -15,13 +15,21 @@ image2 = load_image("https://huggingface.co/spaces/merve/chameleon-7b/resolve/ma
 
 # Initialize processor and model
 processor = AutoProcessor.from_pretrained("HuggingFaceTB/SmolVLM-Instruct")
+# model = AutoModelForVision2Seq.from_pretrained(
+#     "HuggingFaceTB/SmolVLM-Instruct",
+#     torch_dtype=torch.bfloat16,
+#     device_map="auto",
+#     _attn_implementation="flash_attention_2",
+#     # _attn_implementation="flash_attention_2" if DEVICE == "cuda" else "eager",
+# )
+
 model = AutoModelForVision2Seq.from_pretrained(
     "HuggingFaceTB/SmolVLM-Instruct",
     torch_dtype=torch.bfloat16,
-    device_map="auto",
-    _attn_implementation="flash_attention_2",
-    # _attn_implementation="flash_attention_2" if DEVICE == "cuda" else "eager",
+    device_map="auto",  # Automatically maps to GPU if available
+    # Remove or replace _attn_implementation
 )
+
 
 print(f"Model has {model.num_parameters():,} parameters")
 print("Moving model to device")
