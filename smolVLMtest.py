@@ -69,16 +69,16 @@ print(generated_texts[0])
 # """
 
 
-# Prepare inputs
-prompt = processor.apply_chat_template(messages, add_generation_prompt=True)
-inputs = processor(text=prompt, images=[image1, image2], return_tensors="pt")
-inputs = inputs.to(DEVICE)
+# # Prepare inputs
+# prompt = processor.apply_chat_template(messages, add_generation_prompt=True)
+# inputs = processor(text=prompt, images=[image1, image2], return_tensors="pt")
+# inputs = inputs.to(DEVICE)
 
-# Generate outputs
-generated_ids = model.generate(**inputs, max_new_tokens=500)
-generated_texts = processor.batch_decode(
-    generated_ids,
-    skip_special_tokens=True,
-)
+# # Generate outputs
+# generated_ids = model.generate(**inputs, max_new_tokens=500)
+# generated_texts = processor.batch_decode(
+#     generated_ids,
+#     skip_special_tokens=True,
+# )
 
-print(generated_texts[0])
+# print(generated_texts[0])
